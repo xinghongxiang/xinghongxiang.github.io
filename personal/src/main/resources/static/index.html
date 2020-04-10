@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>yanyan</title>
+</head>
+<body>
+<!--    <div id="chart" style="width:2000px;height:800px;"></div>-->
+<div id="chart1" style="width:3000px;height:800px;position: absolute; right: -850px;"></div>
+</body>
+<script src="https://cdn.bootcss.com/echarts/4.6.0/echarts-en.common.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.0.min.js"></script>
+<script type="text/javascript">
+    var data1 = [];
+    var data2 = [];
+    $.ajax({
+        url: "yanyan/getSalary",    //请求的url地址
+        dataType: "json",   //返回格式为json
+        async: false,//请求是否异步，默认为异步，这也是ajax重要特性
+        type: "GET",   //请求方式
+        success: function (res) {
+            for (var i = 0; i < res.length; i++) {
+                data1.push(res[i].createTime);
+                data2.push(res[i].total);
+            }
+
+        }
+    });
+    // 初始化图表标签
+    var myChart = echarts.init(document.getElementById('chart1'));
+
+    option = {
+        xAxis: {
+            type: 'category',
+            data: data1,
+            axisLabel: {//坐标轴刻度标签的相关设置。
+                interval: 0
+            }
+        },
+        yAxis: {
+            type: 'value',
+            splitLine: {//去除网格线
+                show: false
+            }
+        },
+        tooltip: {
+            showContent: true,
+            show: true
+        },
+        series: [{
+            data: data2,
+            type: 'line',
+            smooth: true,
+            itemStyle: {
+                normal: {
+                    label: {
+                        show: true
+                    }
+                }
+            }
+        }]
+    };
+
+    myChart.setOption(option);
+</script>
+</html>
